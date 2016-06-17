@@ -1,8 +1,17 @@
-from flask import json
+import json
+import time
+import datetime
 from pymongo import MongoClient
 import requests
 
 __author__ = 'matthew.farrugia'
+
+def daysTilRain(firstDayOfRain):
+    timeNow = time.time()
+    todayDate = datetime.datetime.fromtimestamp(timeNow)
+    daysToRain = (firstDayOfRain - todayDate).days  # whole days
+    return daysToRain
+
 
 #db variables
 mongoHost = "ds015774.mlab.com"
@@ -22,14 +31,10 @@ forecast_url = 'http://api.openweathermap.org/data/2.5/forecast?q=' +city + ',' 
 #access collection
 client = MongoClient("mongodb://root:PanamaPapers123@ds015774.mlab.com:15774/heroku_kjcv89lc")
 db = client["heroku_kjcv89lc"]
-collection = db["weather_logs"]
+collection = db["prediction_logs"]
 
 #get data from API
 response = requests.get(forecast_url)
-
-#insert data in collection
-#insertResult = collection.insert_one(json.loads(response.content))
-findResult = collection.find()
 
 totalPrecipitation = 0
 isRain = None
@@ -37,24 +42,21 @@ firstDateOfRain = None
 lastDateOfRain = None
 
 #check total precipitation for the next five days
-for document in findResult:
-    for forecast in  document["list"]:
-        try:
-            totalPrecipitation += forecast["rain"]["3h"]
-            if totalPrecipitation > 0 and firstDateOfRain is None:
-                firstDateOfRain = forecast["dt"]
-                isRain = True
-            if forecast["rain"]["3h"] > 0:
-                lastDateOfRain = forecast["dt"]
-        except KeyError:
-            continue
+weekForecasts = json.loads(response.content)
+for forecast in weekForecasts["list"]:
+    try:
+        totalPrecipitation += forecast["rain"]["3h"]
+        if totalPrecipitation > 0 and firstDateOfRain is None:
+            firstDateOfRain = datetime.datetime.fromtimestamp(forecast["dt"])
+            daysUntilRain = daysTilRain(firstDateOfRain)
+            isRain = False if daysUntilRain<3 else True
+#        if forecast["rain"]["3h"] > 0:
+#           lastDateOfRain = datetime.datetime.fromtimestamp(forecast["dt"]).strftime('%Y-%m-%d %H:%M:%S')
+    except KeyError:
+        continue
 
-json_str = "{washCar : "",
-  predictionBasis : {
-   daysUntilRain : 3,
-   precipitation : 0.6
-  },"
+result = '{"washCar" : "'+isRain.__str__()+'", "predictionBasis" : { "daysUntilRain" : "'+daysUntilRain.__str__()+'", "precipitation" : "'+totalPrecipitation.__str__()+'ml" }}'
+result_json = json.loads(result)
 
-
-    #for key in document.keys():
-    #    print document[key]
+#insert data in collection
+collection.insert_one(result_json)
