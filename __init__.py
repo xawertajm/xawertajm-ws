@@ -7,6 +7,7 @@ import requests
 __author__ = 'matthew.farrugia'
 
 def daysTilRain(firstDayOfRain):
+
     timeNow = time.time()
     todayDate = datetime.datetime.fromtimestamp(timeNow)
     daysToRain = (firstDayOfRain - todayDate).days  # whole days
