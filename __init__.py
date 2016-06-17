@@ -56,7 +56,8 @@ while True:
         except KeyError:
             continue
 
-    prediction = '{"washCar" : "'+isRain.__str__()+'", "predictionBasis" : { "daysUntilRain" : "'+daysUntilRain.__str__()+'", "precipitation" : "'+totalPrecipitation.__str__()+'ml" }}'
+    id = int(time.time()).__str__()
+    prediction = '{"id" : "'+id+'","washCar" : "'+isRain.__str__()+'", "predictionBasis" : { "daysUntilRain" : "'+daysUntilRain.__str__()+'", "precipitation" : "'+totalPrecipitation.__str__()+'ml" }}'
     prediction_json = json.loads(prediction)
 
     #insert data in collection
