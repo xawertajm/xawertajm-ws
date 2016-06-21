@@ -1,3 +1,4 @@
+"""
 import json
 import time
 import datetime
@@ -66,3 +67,4 @@ while True:
 
     #Update prediction every hour
     time.sleep(3600)
+"""

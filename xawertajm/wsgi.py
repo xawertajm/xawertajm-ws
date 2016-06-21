@@ -6,14 +6,14 @@ app = Flask(__name__)
 
 #db variables
 
-mongoHost = "ds015774.mlab.com"
-mongoPort = 15774
-mongoUser = "root"
-mongoPassword = "PanamaPapers123"
-mongoDb = "heroku_kjcv89lc"
+mongoHost = os.environ.get("MONGO_HOST")
+mongoPort = os.environ.get("MONGO_PORT")
+mongoUser = os.environ.get("USERNAME")
+mongoPassword = os.environ.get("PASSWORD")
+mongoDb = os.environ.get("DATABASE_NAME")
 
 #access collection
-client = MongoClient("mongodb://root:PanamaPapers123@ds015774.mlab.com:15774/heroku_kjcv89lc")
+client = MongoClient("mongodb://"+mongoUser+":"+mongoPassword+"@"+mongoHost+":"+mongoPort+"/"+mongoDb)
 db = client[mongoDb]
 collection = db["prediction_logs"]
 
