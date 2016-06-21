@@ -5,6 +5,7 @@ from pymongo import MongoClient
 app = Flask(__name__)
 
 #db variables
+
 mongoHost = os.environ.get("MONGO_HOST")
 mongoPort = os.environ.get("MONGO_PORT")
 mongoUser = os.environ.get("USERNAME")
@@ -12,7 +13,7 @@ mongoPassword = os.environ.get("PASSWORD")
 mongoDb = os.environ.get("DATABASE_NAME")
 
 #access collection
-client = MongoClient("mongodb://"+mongoUser+":"+mongoPassword+"@"+mongoHost+":"+mongoPort+"/"+db)
+client = MongoClient("mongodb://"+mongoUser+":"+mongoPassword+"@"+mongoHost+":"+mongoPort+"/"+mongoDb)
 db = client[mongoDb]
 collection = db["prediction_logs"]
 
