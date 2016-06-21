@@ -16,11 +16,10 @@ client = MongoClient("mongodb://"+mongoUser+":"+mongoPassword+"@"+mongoHost+":"+
 db = client[mongoDb]
 collection = db["prediction_logs"]
 
-"""
+
 @app.route("/")
 def hello():
-    return "Hello orld!"
-"""
+    return "Welcome to XAWERTAJM-WS!"
 
 @app.route("/result", methods=["GET"])
 def getResult():

@@ -1,1 +1,1 @@
-web: gunicorn app.wsgi:app --log-file -
+web: gunicorn xawertajm.wsgi:app --log-file -
