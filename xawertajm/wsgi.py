@@ -36,7 +36,7 @@ forecast_url = 'http://api.openweathermap.org/data/2.5/forecast?q=' +city + ',' 
 def hello():
     return "Welcome to XAWERTAJM-WS!"
 
-app.route("/result", methods=["GET"])
+@app.route("/result", methods=["GET"])
 def getLatestPrediction():
     result = collection.find().sort("id", -1).limit(1)
     timestamp = int(result[1]['id'])
