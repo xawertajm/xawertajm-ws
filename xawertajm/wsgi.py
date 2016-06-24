@@ -6,7 +6,7 @@ import time
 from flask import Flask, jsonify
 from pymongo import MongoClient
 from bson.json_util import dumps
-from flask.ext.cors import CORS
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
