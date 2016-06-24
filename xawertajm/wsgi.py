@@ -65,12 +65,11 @@ def isUpdated(timestamp):
 def updatePredictions():
     # get data from API
     response = requests.get(forecast_url)
-
-    isRain = None
+    washCar = True
     firstDateOfRain = None
     lastDateOfRain = None
     totalPrecipitation = 0
-    daysUntilRain = -2
+    daysUntilRain = -1
 
     # check total precipitation for the next five days
     weekForecasts = json.loads(response.content)
@@ -80,12 +79,12 @@ def updatePredictions():
             if totalPrecipitation > 0 and firstDateOfRain is None:
                 firstDateOfRain = datetime.datetime.fromtimestamp(forecast["dt"])
                 daysUntilRain = daysTilRain(firstDateOfRain)
-                isRain = False if daysUntilRain < 3 else True
+                washCar = False if daysUntilRain < 3 else True
         except KeyError:
             continue
 
     id = int(time.time()).__str__()
-    prediction = '{"id" : "' + id + '","washCar" : "' + isRain.__str__() + '", "predictionBasis" : { "daysUntilRain" : "' + daysUntilRain.__str__() + '", "precipitation" : "' + totalPrecipitation.__str__() + 'ml" }}'
+    prediction = '{"id" : "' + id + '","washCar" : "' + washCar.__str__() + '", "predictionBasis" : { "daysUntilRain" : "' + daysUntilRain.__str__() + '", "precipitation" : "' + totalPrecipitation.__str__() + 'ml" }}'
     prediction_json = json.loads(prediction)
 
     # insert data in collection
