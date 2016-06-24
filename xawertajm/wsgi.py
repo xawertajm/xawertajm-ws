@@ -70,6 +70,7 @@ def updatePredictions():
     firstDateOfRain = None
     lastDateOfRain = None
     totalPrecipitation = 0
+    daysUntilRain = -2
 
     # check total precipitation for the next five days
     weekForecasts = json.loads(response.content)
